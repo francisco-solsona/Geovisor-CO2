@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta charset="utf-8"> 
+    <title>Carbono Almacenado - Geovisor</title> <!-- Título de la página -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"> <!-- Configura la vista para dispositivos móviles -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.css" rel="stylesheet"> <!-- Incluye el CSS de Mapbox -->
+    <link rel="stylesheet" href="styles.css"> 
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.9.3/mapbox-gl.js"></script> <!-- Incluye el JS de Mapbox -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"> <!-- Incluye la fuente Montserrat -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.min.js"></script>  
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v5.0.0/mapbox-gl-geocoder.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wordcloud/1.1.0/wordcloud.min.js"></script>
+    <script src="https://unpkg.com/@turf/turf/turf.min.js"></script> <!-- Agregar Turf.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <!-- ///// AGREGAMOS ICONOS DE FONT-AWESOME ///// -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/geotiff"></script>
+    
+</head>
+
+<body>
+    <!-- ///// ESTRUCTURA DEL HEADER ///// -->
+    <div class="header">
+        <div class="header-overlay"></div> <!-- Fondo negro con opacidad -->
+        <a href="https://www.pladesu.com/" target="_blank" class="logo-container">
+            <img src="img/pladesu-logo.png" alt="Logo" class="logo">
+        </a>
+    </div>
+    
+    <!-- ///// ESTRUCTURA DEL CONTENEDOR DE INFORMACIÓN ///// -->
+    <div class="info-container" id="info-container"> 
+
+        <h1>Geovisor <br> Almacenes de Carbono </h1>
+
+        <hr>
+
+        <div class="info-block" id="resumen">
+            <h2>Explora el carbono en el suelo y la vegetación 🌍💨</h2>
+            <p>
+                Este visor interactivo te permite descubrir, de manera fácil y visual, las zonas que almacenan una mayor
+                cantidad de carbono en el suelo y las plantas. Con solo un vistazo, podrás ver cómo se 
+                <strong>distribuye el carbono</strong> en el paisaje y entender su rol clave en el 
+                <strong>cambio climático</strong>.
+            </p>
+        </div> 
+
+        
+
+        
+        <div class="info-block">
+
+            <h2>¿Por qué es importante tener esta información? 🌱⚖️</h2>
+
+            <!-- Bloque 1: Bonos de carbono y economía verde -->
+            <h2 class="toggle-header">
+                <span class="toggle-arrow">▼</span> Bonos de carbono y economía verde
+            </h2>
+            <p class="toggle-content" style="display: none;">
+                Las áreas con alto almacenamiento de carbono pueden generar bonos de carbono, apoyando proyectos sostenibles 
+                y ayudando a reducir las emisiones. Saber dónde está el carbono es crucial para aprovechar este recurso 
+                económico y combatir el cambio climático.
+            </p>
+            <!-- Bloque 2: Control del carbono atmosférico -->
+            <h2 class="toggle-header">
+                <span class="toggle-arrow">▼</span> Control del carbono atmosférico
+            </h2>
+            <p class="toggle-content" style="display: none;">
+                Identificar las zonas ricas en carbono nos permite implementar estrategias de conservación que ayudan a reducir 
+                el carbono en la atmósfera, contribuyendo directamente al enfriamiento del planeta.
+            </p>
+            <!-- Bloque 3: Planificación sostenible -->
+            <h2 class="toggle-header">
+                <span class="toggle-arrow">▼</span> Planificación sostenible
+            </h2>
+            <p class="toggle-content" style="display: none;">
+                Conocer la distribución del carbono es esencial para urbanistas y planificadores. Los datos permiten tomar 
+                decisiones informadas sobre el uso del suelo, la reforestación y la gestión territorial, promoviendo ciudades 
+                más verdes y resilientes.
+            </p>
+        </div>
+
+    </div>
+    
+    <div id="map"></div>
+
+    <!-- ///// ESTRUCTURA DEL MENU ///// -->
+    <div class="side-tabs">
+        
+        <button id="menu-toggle" class="tab-button" data-tooltip="Expandir/Ocultar">☰</button>
+
+        <!-- //////////////////////////////////////////// -->
+         
+        <div class="tab-button-container">   
+            <button class="tab-button" id="tab-how-to" data-tooltip="¿Cómo usar?">
+                <i class="icon-exclamation-sign" id="menu-icon"></i>
+            </button>
+            <div class="submenu">
+                <div class="submenu-title">¿Cómo usar?</div>
+            </div>
+        </div>
+
+        <!-- //////////////////////////////////////////// -->
+
+        <div class="tab-button-container">
+            <button class="tab-button" id="tab-predio" data-tooltip="Zonificación">
+                <i class="icon-building" id="menu-icon"></i>
+            </button>
+            <div class="submenu">
+                <div class="submenu-title">Zonificación</div>
+                <button class="submenu-item" id="predio-option-a">
+                    <i class="icon-home" id="submenu-icon"></i> Uso del suelo
+                </button>
+                <button class="submenu-item" id="predio-option-b">
+                    <i class="icon-random" id="submenu-icon"></i> Compatibilidades
+                </button>
+                <button class="submenu-item" id="predio-option-c">
+                    <i class="icon-list-ul" id="submenu-icon"></i> Normatividad
+                </button>
+            </div>
+        </div>
+
+        <!-- //////////////////////////////////////////// -->
+
+        <div class="tab-button-container"> 
+            <button class="tab-button" id="tab-point-info" data-tooltip="Información">
+                <i class="icon-bar-chart" id="menu-icon"></i>
+            </button>
+            <div class="submenu">
+                <div class="submenu-title">Información</div>
+                <button class="submenu-item" id="point-info-option-a">
+                    <i class="icon-list-alt" id="submenu-icon"></i> Resumen
+                </button>
+                <button class="submenu-item" id="point-info-option-b">
+                    <i class="icon-table" id="submenu-icon"></i> Tabla
+                </button>
+                <button class="submenu-item" id="point-info-option-c">
+                    <i class="icon-bar-chart" id="submenu-icon"></i> Gráfico
+                </button>
+            </div>
+        </div>
+
+        <!-- //////////////////////////////////////////// -->
+
+        <div class="tab-button-container"> 
+            <button class="tab-button" id="tab-share" data-tooltip="Compartir">
+                <i class="icon-share-alt" id="menu-icon"></i>
+            </button>
+            <div class="submenu">
+                <div class="submenu-title">Compartir</div>
+                <button class="submenu-item" id="share-option-a" onclick="shareToLinkedIn()">
+                    <i class="icon-linkedin-sign" id="submenu-icon"></i> LinkedIn
+                </button>
+                <button class="submenu-item" id="share-option-b" onclick="shareToFacebook()">
+                    <i class="icon-facebook-sign" id="submenu-icon"></i> Facebook
+                </button>
+
+            </div>
+        </div>
+
+        <!-- //////////////////////////////////////////// -->
+
+        <div class="tab-button-container"> 
+            <button class="tab-button" id="tab-download" data-tooltip="Descargar">
+                <i class="icon-download-alt" id="menu-icon"></i>
+            </button>
+            <div class="submenu">
+                <div class="submenu-title">Descargar</div>
+                <button class="submenu-item" id="download-option-a">
+                    <i class="icon-download-alt" id="submenu-icon"></i> Descargar
+                </button>
+                <button class="submenu-item" id="download-option-a">
+                    <i class="icon-file-text-alt" id="submenu-icon"></i> Descargar resúmen
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- //////////////////////////////////////////// -->
+
+    <div class="layer-control" id="layer-control">
+        <button class="layer-button" id="layer-toggle" data-tooltip="Encender/Apagar capas">
+            <i class="icon-filter" id="map-control-icon"></i>
+        </button>
+        <button class="layer-button" id="base-map-toggle" data-tooltip="Cambiar mapa base">
+            <i class="icon-globe" id="map-control-icon"></i>
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>
