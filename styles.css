@@ -6,13 +6,13 @@ body { margin: 0;
     top: 0; 
     bottom: 0; 
     left: 0;
-    width: 75vw;
+    width: 80vw;
     height: 100vh;
     float: left;
  } 
 .info-container {
     height: 100vh;
-    width: 25vw;
+    width: 20vw;
     top: 0; 
     right: 0;
     float: right;
@@ -257,59 +257,28 @@ a:visited {
 /* //////////////////////////////////////
 ///////// MENU DE CAPAS Y SIMBOLOGIA //////////
 ////////////////////////////////////// */
-.layer-control {
-    position: fixed; /* Mantiene la posición fija */
-    bottom: 5%; /* Distancia desde la parte inferior */
-    left: 0.5%; /* Distancia desde el lado izquierdo */
-    z-index: 1000; /* Sobre otros elementos */
-    display: flex; /* Alinea los elementos en fila */
-    flex-direction: row; /* Mantén los botones en una fila */
-    gap: 10px; /* Espaciado entre botones */
-}
-.layer-button {
-    width: 40px; /* Ajusta el tamaño deseado */
-    height: 40px; /* Hace que el botón sea cuadrado */
-    background-color: black; /* Fondo negro */
-    border: none; /* Sin bordes */
-    border-radius: 50%; /* Botones redondos */
-    display: flex; /* Centra el contenido */
-    align-items: center; /* Alinea verticalmente */
-    justify-content: center; /* Alinea horizontalmente */
-    cursor: pointer; /* Cambia el cursor al pasar el mouse */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra */
-}
-.layer-button img {
-    width: 30px; /* Ajusta el tamaño del ícono */
-    height: auto; /* Mantiene la proporción */
-    filter: invert(100%); /* Cambia el color a blanco */
-}
-.layer-button:hover {
-    background-color: #555; /* Fondo más claro al pasar el mouse */
-}
-.layer-button[data-tooltip]:hover::after {
-    content: attr(data-tooltip); /* Muestra el texto del atributo data-tooltip */
+#layer-control {
     position: absolute;
-    bottom: 50px;
-    left: 0;
-    background-color: black;
-    color: white;
-    padding: 5px 10px;
+    top: 0px;
+    right: 20.5vw;
+    z-index: 1000;
+    background-color: #222222;
+    border: 1px solid #444;
+    padding: 10px;
     border-radius: 5px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 1001;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    color: white;
 }
-#map-control-icon {
-    width: 10vw; /* Ajusta el tamaño deseado */
-    height: 2.4vh; /* Hace que el botón sea cuadrado */
-    font-size: 24px; /* Aumenta el tamaño del ícono o texto */
-    border-radius: 50%; /* Opcional: convierte el botón en un círculo */
-    align-items: center;
-    justify-content: center;
-    color: white; /* Color del texto */
-    border: none; /* Sin borde */
-    cursor: pointer; /* Cambia el cursor al pasar sobre él */
-    /* padding-bottom: 4.5px; */
+
+#layer-control h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+#layer-control label {
+    display: block;
+    margin: 5px 0;
 }
 /* //////////////////////////////////////
 ///////// FUNCION PARA EL MENU //////////
@@ -432,4 +401,23 @@ a:visited {
 .subcategoria-list li {
     padding: 5px 0;
     border-bottom: 1px solid #eee;
+}
+
+
+
+.mapboxgl-popup {
+    font-family: 'Montserrat', sans-serif;
+    max-width: 300px;
+}
+
+.mapboxgl-popup h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.mapboxgl-popup p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #555;
 }

@@ -53,7 +53,7 @@
         
 
         
-        <div class="info-block">
+        <div class="info-block" id="introduccion">
 
             <h2>¿Por qué es importante tener esta información? 🌱⚖️</h2>
 
@@ -88,6 +88,19 @@
     </div>
     
     <div id="map"></div>
+
+    <div id="layer-control">
+        <h3>Capas</h3>
+        <label>
+            <input type="checkbox" id="anp-toggle"> ANP
+        </label>
+        <label>
+            <input type="checkbox" id="poereq-toggle"> POEREQ
+        </label>
+        <label>
+            <input type="checkbox" id="poel-toggle"> POEL
+        </label>
+    </div>
 
     <!-- ///// ESTRUCTURA DEL MENU ///// -->
     <div class="side-tabs">
@@ -183,14 +196,16 @@
 
     <!-- //////////////////////////////////////////// -->
 
-    <div class="layer-control" id="layer-control">
+    
+    
+    <!-- <div class="layer-control" id="layer-control">
         <button class="layer-button" id="layer-toggle" data-tooltip="Encender/Apagar capas">
             <i class="icon-filter" id="map-control-icon"></i>
         </button>
         <button class="layer-button" id="base-map-toggle" data-tooltip="Cambiar mapa base">
             <i class="icon-globe" id="map-control-icon"></i>
         </button>
-    </div>
+    </div> -->
 
     <script src="script.js"></script>
     

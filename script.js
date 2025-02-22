@@ -14,17 +14,164 @@ const map = new mapboxgl.Map({
 
 map.on('style.load', () => {
     map.setFog({});
-
-    loadGeoTIFF();
+    // Cargar la capa raster primero
+    loadGeoTIFF().then(() => {
+        // Luego cargar la capa de catastro
+        addCustomLayers();
+    });
 });
 
 
+// Variable de la capa de ANPs
+const globalANPUrl = 'mapbox://paco-solsona.6h0rbo3e';
+const globalANPLayer = 'C22014_ANP_CONABIO_2024-1pmkfx';
+// Variable de la capa de POEREQ
+const globalPOEREQUrl = 'mapbox://paco-solsona.d2k9inif';
+const globalPOEREQLayer = 'C22014_POEREQ_2022-4yad5v';
+// Variable de la capa de POEL
+const globalPOELUrl = 'mapbox://paco-solsona.0vfo0rbn';
+const globalPOELLayer = 'C22014_POEL_2014-2h0ocl';
 
+////////////////////////////////////////////
+/////// CARGAMOS LAS CAPAS A UTILIZAR //////
+////////////////////////////////////////////
+
+// Función para volver a cargar la capa personalizada
+function addCustomLayers() {
+
+    // Primero vamos a llamar todos los sources
+    if (!map.getSource('anp')) {
+        map.addSource('anp', {
+            type: 'vector',
+            url: globalANPUrl 
+        });
+    }
+    if (!map.getLayer('anp-line-layer')) {
+        map.addLayer({
+            'id': 'anp-line-layer',
+            'type': 'line',  
+            'source': 'anp',  
+            'source-layer': globalANPLayer, 
+            'slot': 'top',
+            'minzoom': 0,
+            'maxzoom': 22,
+            'paint': {
+                'line-color': '#000000',  
+                'line-width': 3,  
+                'line-opacity': 0.7  
+            },
+            'layout': {
+                'visibility': 'none' // Invisible al inicio
+            }
+        });
+    }
+    if (!map.getLayer('anp-fill-layer')) {
+        map.addLayer({
+            'id': 'anp-fill-layer',
+            'type': 'fill',  
+            'source': 'anp',  
+            'source-layer': globalANPLayer, 
+            'paint': {
+                'fill-color': '#000000', // Color de relleno (puede ser cualquiera)
+                'fill-opacity': 0 // Relleno 100% transparente
+            },
+            'layout': {
+                'visibility': 'none' // Visible al inicio
+            }
+        });
+    }
+
+
+    // Primero vamos a llamar todos los sources
+    if (!map.getSource('poereq')) {
+        map.addSource('poereq', {
+            type: 'vector',
+            url: globalPOEREQUrl 
+        });
+    }
+    if (!map.getLayer('poereq-line-layer')) {
+        map.addLayer({
+            'id': 'poereq-line-layer',
+            'type': 'line', 
+            'source': 'poereq',
+            'source-layer': globalPOEREQLayer,
+            'slot': 'top',
+            'minzoom': 0,
+            'maxzoom': 22,
+            'paint': {
+                'line-color': '#000000',  
+                'line-width': 3,  
+                'line-opacity': 0.7  
+            },
+            'layout': {
+                'visibility': 'none' // Invisible al inicio
+            }
+        });
+    }
+    if (!map.getLayer('poereq-fill-layer')) {
+        map.addLayer({
+            'id': 'poereq-fill-layer',
+            'type': 'fill',  
+            'source': 'poereq',  
+            'source-layer': globalPOEREQLayer, 
+            'paint': {
+                'fill-color': '#000000', // Color de relleno (puede ser cualquiera)
+                'fill-opacity': 0 // Relleno 100% transparente
+            },
+            'layout': {
+                'visibility': 'none' // Visible al inicio
+            }
+        });
+    }
+
+
+    // Primero vamos a llamar todos los sources
+    if (!map.getSource('poel')) {
+        map.addSource('poel', {
+            type: 'vector',
+            url: globalPOELUrl 
+        });
+    }
+    if (!map.getLayer('poel-line-layer')) {
+        map.addLayer({
+            'id': 'poel-line-layer',
+            'type': 'line',  
+            'source': 'poel', 
+            'source-layer': globalPOELLayer, 
+            'slot': 'top',
+            'minzoom': 0,
+            'maxzoom': 22,
+            'paint': {
+                'line-color': '#000000',  
+                'line-width': 3, 
+                'line-opacity': 0.7  
+            },
+            'layout': {
+                'visibility': 'none' // Invisible al inicio
+            }
+        });
+    }
+    if (!map.getLayer('poel-fill-layer')) {
+        map.addLayer({
+            'id': 'poel-fill-layer',
+            'type': 'fill',  
+            'source': 'poel',  
+            'source-layer': globalPOELLayer, 
+            'paint': {
+                'fill-color': '#000000', // Color de relleno (puede ser cualquiera)
+                'fill-opacity': 0 // Relleno 100% transparente
+            },
+            'layout': {
+                'visibility': 'none' // Visible al inicio
+            }
+        });
+    }
+}
 
 
 async function loadGeoTIFF() {
     try {
-        const url = 'layers/R22014_CAS_32bit_up.tif';
+        const url = 'layers/raster/R22014_CAS_32bit_up.tif';
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
@@ -158,15 +305,115 @@ document.querySelectorAll('.toggle-header').forEach(header => {
 ////// ALMACENAMOS VARIABLES GLOBALES //////
 ////////////////////////////////////////////
 
+// Variable global con el nombre descriptivo de los atributos 
+let attributeNames = {};
+// Función para cargar el archivo JSON
+async function loadAttributeNames() {
+    try {
+        const response = await fetch('datos/titulos-tablas.json');
+        attributeNames = await response.json();
+        console.log('Nombres de atributos cargados:', attributeNames);
+    } catch (error) {
+        console.error('Error al cargar los nombres de atributos:', error);
+    }
+}
 
-// Llamar a la función al cargar el mapa
-// map.on('load', () => {
-//     loadGeoTIFF();
-// });
+// Llamar a la función para cargar los nombres de atributos al iniciar el visor
+loadAttributeNames();
+
+////////////////////////////////////////////
+////// ALMACENAMOS VARIABLES GLOBALES //////
+////////////////////////////////////////////
+
+// Función para cambiar la visibilidad de una capa
+// Función para cambiar la visibilidad de una capa
+function toggleLayer(layerId, visibility) {
+    if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility ? 'visible' : 'none');
+    }
+}
+
+// Event listeners para los checkboxes
+document.getElementById('anp-toggle').addEventListener('change', function (e) {
+    toggleLayer('anp-line-layer', e.target.checked);
+    toggleLayer('anp-fill-layer', e.target.checked);
+});
+
+document.getElementById('poereq-toggle').addEventListener('change', function (e) {
+    toggleLayer('poereq-line-layer', e.target.checked);
+    toggleLayer('poereq-fill-layer', e.target.checked);
+});
+
+document.getElementById('poel-toggle').addEventListener('change', function (e) {
+    toggleLayer('poel-line-layer', e.target.checked);
+    toggleLayer('poel-fill-layer', e.target.checked);
+});
 
 ////////////////////////////////////////////
 // FUNCION PARA ESCONDER/DESPLEGAR RESUMEN //
 ////////////////////////////////////////////
 
+// Crear un popup
+const popup = new mapboxgl.Popup({
+    closeButton: true,
+    closeOnClick: false
+});
 
+// Función para formatear números con 2 decimales
+function formatNumber(value) {
+    if (typeof value === 'number') {
+        return value.toFixed(2); // Redondear a 2 decimales
+    }
+    return value; // Devolver el valor original si no es un número
+}
 
+map.on('click', (e) => {
+    console.log('Coordenadas del clic:', e.lngLat);
+
+    // Verificar si se hizo clic en alguna de las capas activas
+    const activeLayers = [];
+    if (document.getElementById('anp-toggle').checked) activeLayers.push('anp-fill-layer');
+    if (document.getElementById('poereq-toggle').checked) activeLayers.push('poereq-fill-layer');
+    if (document.getElementById('poel-toggle').checked) activeLayers.push('poel-fill-layer');
+
+    const clickedFeatures = map.queryRenderedFeatures(e.point, {
+        layers: activeLayers
+    });
+    console.log('Features detectadas:', clickedFeatures);
+
+    // Si se hizo clic en una capa activa, mostrar un popup con los atributos
+    if (clickedFeatures.length > 0) {
+        const properties = clickedFeatures[0].properties;
+        const layerId = clickedFeatures[0].layer.id; // Obtener el ID de la capa
+        const coordinates = e.lngLat;
+
+        let popupContent = '<h3>Atributos</h3>';
+        const layerAttributes = attributeNames[layerId.replace('-fill-layer', '-table')] || {};
+
+        // Recorrer los atributos en el orden definido en el JSON
+        for (const [key, value] of Object.entries(layerAttributes)) {
+            if (value !== null) { // Omitir atributos con valor null
+                const attributeValue = properties[key];
+                if (attributeValue !== undefined && attributeValue !== null) {
+                    // Formatear atributos específicos
+                    let displayValue = attributeValue;
+                    if (
+                        key === 'AREA' || key === 'AREA_HA' || key === 'HECTARES' || // Superficie (ha)
+                        key === 'SUM' || // Total de CO₂ almacenado en el suelo (ton)
+                        key === 'MEAN_HA' // Promedio CO₂ en el suelo (ton/ha)
+                    ) {
+                        displayValue = formatNumber(parseFloat(attributeValue));
+                    }
+                    popupContent += `<p><strong>${value}</strong>: ${displayValue}</p>`;
+                }
+            }
+        }
+
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(popupContent)
+            .addTo(map);
+    } else {
+        console.log('No se detectaron features en el clic.');
+    }
+});
