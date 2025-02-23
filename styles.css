@@ -20,7 +20,10 @@ body { margin: 0;
     font-family: 'Montserrat', sans-serif;
     opacity: 0.9;
     background-color: black;
-    border-radius: 10px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    /* border-radius: 10px; */
+    
     color: #f2f2f2;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     position: fixed;
@@ -270,7 +273,13 @@ a:visited {
     font-family: 'Montserrat', sans-serif;
     color: white;
 }
-
+#layer-select {
+    background-color: #5e5e5e;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+}
 #layer-control h3 {
     margin: 0 0 10px 0;
     font-size: 16px;

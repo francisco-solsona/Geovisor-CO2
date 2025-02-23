@@ -48,7 +48,6 @@
                 <strong>distribuye el carbono</strong> en el paisaje y entender su rol clave en el 
                 <strong>cambio climático</strong>.
             </p>
-            <br>
             <p>
                 Para usar el visor haz <strong>click en el checkbox</strong> para encender la capa de tu interés. 
                 Puedes <strong>hacer click a los polígonos</strong> en el mapa para saber más sobre su captura de carbono, así como
@@ -97,15 +96,12 @@
 
     <div id="layer-control">
         <h3>Capas</h3>
-        <label>
-            <input type="checkbox" id="anp-toggle"> ANP
-        </label>
-        <label>
-            <input type="checkbox" id="poereq-toggle"> POEREQ
-        </label>
-        <label>
-            <input type="checkbox" id="poel-toggle"> POEL
-        </label>
+        <select id="layer-select">
+            <option value="">Selecciona una capa</option>
+            <option value="anp">Áreas Naturales Protegidas</option>
+            <option value="poereq">Ordenamiento Ecológico Regional</option>
+            <option value="poel">Ordenamiento Ecológico Local</option>
+        </select>
     </div>
 
     <!-- ///// ESTRUCTURA DEL MENU ///// -->

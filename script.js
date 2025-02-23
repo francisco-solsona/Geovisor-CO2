@@ -57,7 +57,7 @@ function addCustomLayers() {
             'maxzoom': 22,
             'paint': {
                 'line-color': '#000000',  
-                'line-width': 3,  
+                'line-width': 2,  
                 'line-opacity': 0.7  
             },
             'layout': {
@@ -100,7 +100,7 @@ function addCustomLayers() {
             'maxzoom': 22,
             'paint': {
                 'line-color': '#000000',  
-                'line-width': 3,  
+                'line-width': 2,  
                 'line-opacity': 0.7  
             },
             'layout': {
@@ -143,7 +143,7 @@ function addCustomLayers() {
             'maxzoom': 22,
             'paint': {
                 'line-color': '#000000',  
-                'line-width': 3, 
+                'line-width': 2, 
                 'line-opacity': 0.7  
             },
             'layout': {
@@ -325,29 +325,7 @@ loadAttributeNames();
 ////// ALMACENAMOS VARIABLES GLOBALES //////
 ////////////////////////////////////////////
 
-// Función para cambiar la visibilidad de una capa
-// Función para cambiar la visibilidad de una capa
-function toggleLayer(layerId, visibility) {
-    if (map.getLayer(layerId)) {
-        map.setLayoutProperty(layerId, 'visibility', visibility ? 'visible' : 'none');
-    }
-}
 
-// Event listeners para los checkboxes
-document.getElementById('anp-toggle').addEventListener('change', function (e) {
-    toggleLayer('anp-line-layer', e.target.checked);
-    toggleLayer('anp-fill-layer', e.target.checked);
-});
-
-document.getElementById('poereq-toggle').addEventListener('change', function (e) {
-    toggleLayer('poereq-line-layer', e.target.checked);
-    toggleLayer('poereq-fill-layer', e.target.checked);
-});
-
-document.getElementById('poel-toggle').addEventListener('change', function (e) {
-    toggleLayer('poel-line-layer', e.target.checked);
-    toggleLayer('poel-fill-layer', e.target.checked);
-});
 
 ////////////////////////////////////////////
 // FUNCION PARA ESCONDER/DESPLEGAR RESUMEN //
@@ -367,14 +345,54 @@ function formatNumber(value) {
     return value; // Devolver el valor original si no es un número
 }
 
+// Función para cambiar la visibilidad de una capa
+function toggleLayer(layerId, visibility) {
+    if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility ? 'visible' : 'none');
+    }
+}
+
+// Event listener para el dropdown
+document.getElementById('layer-select').addEventListener('change', function (e) {
+    const selectedLayer = e.target.value;
+
+    // Desactivar todas las capas primero
+    toggleLayer('anp-line-layer', false);
+    toggleLayer('anp-fill-layer', false);
+    toggleLayer('poereq-line-layer', false);
+    toggleLayer('poereq-fill-layer', false);
+    toggleLayer('poel-line-layer', false);
+    toggleLayer('poel-fill-layer', false);
+
+    // Activar la capa seleccionada
+    if (selectedLayer === 'anp') {
+        toggleLayer('anp-line-layer', true);
+        toggleLayer('anp-fill-layer', true);
+    } else if (selectedLayer === 'poereq') {
+        toggleLayer('poereq-line-layer', true);
+        toggleLayer('poereq-fill-layer', true);
+    } else if (selectedLayer === 'poel') {
+        toggleLayer('poel-line-layer', true);
+        toggleLayer('poel-fill-layer', true);
+    }
+});
+
+// Evento de clic en el mapa
 map.on('click', (e) => {
     console.log('Coordenadas del clic:', e.lngLat);
 
-    // Verificar si se hizo clic en alguna de las capas activas
-    const activeLayers = [];
-    if (document.getElementById('anp-toggle').checked) activeLayers.push('anp-fill-layer');
-    if (document.getElementById('poereq-toggle').checked) activeLayers.push('poereq-fill-layer');
-    if (document.getElementById('poel-toggle').checked) activeLayers.push('poel-fill-layer');
+    // Obtener la capa seleccionada del dropdown
+    const selectedLayer = document.getElementById('layer-select').value;
+
+    // Verificar si se hizo clic en la capa activa
+    let activeLayers = [];
+    if (selectedLayer === 'anp') {
+        activeLayers = ['anp-fill-layer'];
+    } else if (selectedLayer === 'poereq') {
+        activeLayers = ['poereq-fill-layer'];
+    } else if (selectedLayer === 'poel') {
+        activeLayers = ['poel-fill-layer'];
+    }
 
     const clickedFeatures = map.queryRenderedFeatures(e.point, {
         layers: activeLayers
