@@ -359,7 +359,7 @@ map.on('click', async function (e) {
         // Crear un nuevo marcador en el mapa
         currentMarker = new mapboxgl.Marker({ color: '#FF0000' })
             .setLngLat(coordinates)
-            .setPopup(new mapboxgl.Popup().setHTML(`CO2 en el suelo: ${rasterValue}`))
+            .setPopup(new mapboxgl.Popup().setHTML(`CO2 en el suelo (toneladas): ${rasterValue}`))
             .addTo(map);
 
         // Mostrar el popup automáticamente

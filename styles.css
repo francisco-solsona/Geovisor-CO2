@@ -117,7 +117,7 @@ a:visited {
 ////////////////////////////////////// */
 .header {
     position: relative;
-    width: 16vw;
+    width: 10vw;
     height: auto;
     overflow: hidden;
     margin: 0;
@@ -142,7 +142,7 @@ a:visited {
     z-index: 2;
 }
 .logo {
-    width: 13vw; /* Ajusta el tamaño del logo */
+    width: 7vw; /* Ajusta el tamaño del logo */
     height: auto;
     transition: opacity 0.3s ease-in-out;
 }
