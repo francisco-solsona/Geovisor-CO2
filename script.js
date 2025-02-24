@@ -325,8 +325,79 @@ loadAttributeNames();
 ////// ALMACENAMOS VARIABLES GLOBALES //////
 ////////////////////////////////////////////
 
+let addPointMode = false; // Variable para almacenar el estado de la herramienta
+let currentMarker = null; // Variable para almacenar el marcador actual
 
+// Evento para activar/desactivar el modo de agregar puntos
+document.getElementById('add-point-button').addEventListener('click', function () {
+    addPointMode = !addPointMode; // Alternar entre activado y desactivado
+    this.classList.toggle('active'); // Alternar la clase 'active'
 
+    if (!addPointMode) {
+        // Si la herramienta se desactiva, eliminar el marcador actual
+        if (currentMarker) {
+            currentMarker.remove(); // Eliminar el marcador anterior
+            currentMarker = null; // Limpiar la referencia
+        }
+    }
+});
+
+// Evento de clic en el mapa para agregar puntos
+map.on('click', async function (e) {
+    if (addPointMode) { // Solo agregar puntos si la herramienta está activa
+        const coordinates = e.lngLat;
+
+        // Obtener el valor del raster en las coordenadas del clic
+        const rasterValue = await getRasterValueAtCoordinates(coordinates);
+
+        // Eliminar el marcador anterior si existe
+        if (currentMarker) {
+            currentMarker.remove(); // Eliminar el marcador anterior
+            currentMarker = null; // Limpiar la referencia
+        }
+
+        // Crear un nuevo marcador en el mapa
+        currentMarker = new mapboxgl.Marker({ color: '#FF0000' })
+            .setLngLat(coordinates)
+            .setPopup(new mapboxgl.Popup().setHTML(`CO2 en el suelo: ${rasterValue}`))
+            .addTo(map);
+
+        // Mostrar el popup automáticamente
+        currentMarker.togglePopup();
+    }
+});
+
+// Función para obtener el valor del raster en las coordenadas dadas
+async function getRasterValueAtCoordinates(coordinates) {
+    try {
+        const url = 'layers/raster/R22014_CAS_32bit_up.tif'; // Ruta al archivo .tif
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        const tiff = await GeoTIFF.fromArrayBuffer(arrayBuffer);
+        const image = await tiff.getImage();
+
+        // Obtener las coordenadas del clic en el sistema de referencia del raster
+        const [minX, minY, maxX, maxY] = image.getBoundingBox();
+        const width = image.getWidth();
+        const height = image.getHeight();
+
+        // Convertir las coordenadas geográficas a píxeles
+        const x = Math.floor(((coordinates.lng - minX) / (maxX - minX)) * width);
+        const y = Math.floor(((maxY - coordinates.lat) / (maxY - minY)) * height);
+
+        // Leer el valor del píxel en las coordenadas
+        const raster = await image.readRasters({ window: [x, y, x + 1, y + 1] });
+        const value = raster[0][0]; // Obtener el valor del primer canal (banda)
+
+        // Si el valor es -99999 (NoData), devolver un mensaje
+        if (value === -99999) return 'Sin datos';
+
+        return value.toFixed(2); // Redondear a 2 decimales
+    } catch (error) {
+        console.error("Error al obtener el valor del raster:", error);
+        return 'Error';
+    }
+}
 ////////////////////////////////////////////
 // FUNCION PARA ESCONDER/DESPLEGAR RESUMEN //
 ////////////////////////////////////////////

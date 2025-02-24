@@ -430,3 +430,96 @@ a:visited {
     font-size: 14px;
     color: #555;
 }
+
+
+
+/* ----------------- */
+/* PALETA DE COLORES */
+/* ----------------- */
+#legend {
+    position: absolute;
+    bottom: 35px;
+    left: 10px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+}
+#legend h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+}
+#legend div {
+    margin: 5px 0;
+}
+#legend span {
+    display: inline-block;
+    width: 20px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+
+/* ------------------ */
+/* Estilos para el contenedor del botón */
+#add-point-container {
+    position: absolute;
+    bottom: 22vh;
+    left: 0.8vw;
+    z-index: 1000; /* Asegura que esté por encima del mapa */
+    background-color: #222222;
+    border: 1px solid #444;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Estilos para el botón */
+#add-point-button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 20px; /* Tamaño del ícono */
+    padding: 5px;
+    outline: none;
+    position: relative; /* Necesario para posicionar el tooltip */
+}
+
+/* Efecto hover para el botón */
+#add-point-button:hover {
+    color: #FF0000; /* Cambia el color al pasar el mouse */
+}
+
+/* Estilo cuando el botón está activo */
+#add-point-button.active {
+    color: #FF0000; /* Cambia el color al pasar el mouse */
+}
+/* Tooltip */
+#add-point-button::after {
+    content: attr(data-tooltip); /* Muestra el texto del atributo data-tooltip */
+    position: absolute;
+    bottom: 100%; /* Coloca el tooltip arriba del botón */
+    left: 50%; /* Centra el tooltip horizontalmente */
+    transform: translateX(-50%); /* Ajusta la posición para centrarlo */
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+    opacity: 0; /* Inicialmente invisible */
+    visibility: hidden; /* Inicialmente oculto */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Transición suave */
+}
+
+/* Mostrar el tooltip al hacer hover */
+#add-point-button:hover::after {
+    opacity: 1; /* Hace visible el tooltip */
+    visibility: visible; /* Muestra el tooltip */
+    left: 5vw;
+
+}

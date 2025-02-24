@@ -49,9 +49,8 @@
                 <strong>cambio climático</strong>.
             </p>
             <p>
-                Para usar el visor haz <strong>click en el checkbox</strong> para encender la capa de tu interés. 
-                Puedes <strong>hacer click a los polígonos</strong> en el mapa para saber más sobre su captura de carbono, así como
-                las políticas ambientales que lo rigen.
+                Para usar el visor puedes <strong>seleccionar una capa</strong> y <strong>hacer click</strong> a un polígono o agregar 
+                <strong>un marcador</strong> para identificar la captura de CO2.
             </p>
         </div> 
 
@@ -94,6 +93,16 @@
     
     <div id="map"></div>
 
+    <div id="legend">
+        <h4>Carbono Almacenado</h4>
+        <div><span style="background-color: rgb(34, 139, 34);"></span> Bajo (0 - 20%)</div>
+        <div><span style="background-color: rgb(152, 251, 152);"></span> Medio-Bajo (20 - 40%)</div>
+        <div><span style="background-color: rgb(255, 255, 0);"></span> Medio (40 - 60%)</div>
+        <div><span style="background-color: rgb(255, 165, 0);"></span> Medio-Alto (60 - 80%)</div>
+        <div><span style="background-color: rgb(255, 69, 0);"></span> Alto (80 - 100%)</div>
+        <div><span style="background-color: rgb(255, 0, 0);"></span> Muy Alto (100%+)</div>
+    </div>
+
     <div id="layer-control">
         <h3>Capas</h3>
         <select id="layer-select">
@@ -102,6 +111,12 @@
             <option value="poereq">Ordenamiento Ecológico Regional</option>
             <option value="poel">Ordenamiento Ecológico Local</option>
         </select>
+    </div>
+    <!-- Botón independiente para agregar puntos -->
+    <div id="add-point-container">
+        <button id="add-point-button" data-tooltip="Agregar marcador">
+            <i class="icon-map-marker"></i>
+        </button>
     </div>
 
     <!-- ///// ESTRUCTURA DEL MENU ///// -->
@@ -200,14 +215,7 @@
 
     
     
-    <!-- <div class="layer-control" id="layer-control">
-        <button class="layer-button" id="layer-toggle" data-tooltip="Encender/Apagar capas">
-            <i class="icon-filter" id="map-control-icon"></i>
-        </button>
-        <button class="layer-button" id="base-map-toggle" data-tooltip="Cambiar mapa base">
-            <i class="icon-globe" id="map-control-icon"></i>
-        </button>
-    </div> -->
+    
 
     <script src="script.js"></script>
     
