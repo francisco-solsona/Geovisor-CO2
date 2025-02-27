@@ -42,5 +42,11 @@
         "TA": null,
         "URBANO": null,
         "ZSR": null
+    },
+    "dqro-table": {
+        "NOMBRE": "Nombre",
+        "AREA_HA": "Superficie (ha)",
+        "SUM": "Total de CO₂ almacenado en el suelo (ton)",
+        "MEAN_HA": "Promedio CO₂ en el suelo (ton/ha)"
     }
 }
