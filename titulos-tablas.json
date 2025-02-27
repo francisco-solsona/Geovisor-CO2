@@ -1,0 +1,52 @@
+{
+    "anp-table": {
+        "Nombre": "Nombre",
+        "DECLAR": "Declaratoria",
+        "HECTARES": "Superficie (ha)"
+    },
+    "poereq-table": {
+        "NOMBRE": "Nombre",
+        "AREA": "Superficie (ha)",
+        "UGA": "Unidad de Gestión Ambiental",
+        "POLITICA": "Política",
+        "SUM": "Total de CO₂ almacenado en el suelo (ton)",
+        "MEAN_HA": "Promedio CO₂ en el suelo (ton/ha)",
+        "CRITERIOS": "Criterios",
+        "ESTRATEGIA": "Estrategia",
+        "LINEAMIENT": "Lineamientos",
+        "AREA_KM2": null,
+        "MEAN": null,
+        "OBJECTID": null
+    },
+    "poel-table": {
+        "NOM": "Nombre",
+        "AREA_HA": "Superficie (ha)",
+        "NO_UGA": "Unidad de Gestión Ambiental",
+        "NO_UGE": "Unidad de Gestión Ambiental Específica",
+        "POLPRINC": "Política",
+        "SUM": "Total de CO₂ almacenado en el suelo (ton)",
+        "MEAN_HA": "Promedio CO₂ en el suelo (ton/ha)",
+        "AGP": null,
+        "AREA": null,
+        "AVR": null,
+        "CA": null,
+        "CF": null,
+        "ESR": null,
+        "EX": null,
+        "FID_POEL_T": null,
+        "MEAN": null,
+        "NO_UDSGEO": null,
+        "OBJECTID": null,
+        "PERIMETER": null,
+        "PUR": null,
+        "TA": null,
+        "URBANO": null,
+        "ZSR": null
+    },
+    "dqro-table": {
+        "NOMBRE": "Nombre",
+        "AREA_HA": "Superficie (ha)",
+        "SUM": "Total de CO₂ almacenado en el suelo (ton)",
+        "MEAN_HA": "Promedio CO₂ en el suelo (ton/ha)"
+    }
+}

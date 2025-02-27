@@ -31,6 +31,9 @@ const globalPOEREQLayer = 'C22014_POEREQ_2022-4yad5v';
 // Variable de la capa de POEL
 const globalPOELUrl = 'mapbox://paco-solsona.0vfo0rbn';
 const globalPOELLayer = 'C22014_POEL_2014-2h0ocl';
+// Variable de la capa de Distrito Qro
+const globalDQROUrl = 'mapbox://paco-solsona.9k5b84q3';
+const globalDQROLayer = 'C22014_DISTRITO_QRO_2024-7j1h8u';
 
 ////////////////////////////////////////////
 /////// CARGAMOS LAS CAPAS A UTILIZAR //////
@@ -157,6 +160,49 @@ function addCustomLayers() {
             'type': 'fill',  
             'source': 'poel',  
             'source-layer': globalPOELLayer, 
+            'paint': {
+                'fill-color': '#000000', // Color de relleno (puede ser cualquiera)
+                'fill-opacity': 0 // Relleno 100% transparente
+            },
+            'layout': {
+                'visibility': 'none' // Visible al inicio
+            }
+        });
+    }
+
+
+    // Primero vamos a llamar todos los sources
+    if (!map.getSource('dqro')) {
+        map.addSource('dqro', {
+            type: 'vector',
+            url: globalDQROUrl 
+        });
+    }
+    if (!map.getLayer('dqro-line-layer')) {
+        map.addLayer({
+            'id': 'dqro-line-layer',
+            'type': 'line',  
+            'source': 'dqro', 
+            'source-layer': globalDQROLayer, 
+            'slot': 'top',
+            'minzoom': 0,
+            'maxzoom': 22,
+            'paint': {
+                'line-color': '#000000',  
+                'line-width': 2, 
+                'line-opacity': 0.7  
+            },
+            'layout': {
+                'visibility': 'none' // Invisible al inicio
+            }
+        });
+    }
+    if (!map.getLayer('dqro-fill-layer')) {
+        map.addLayer({
+            'id': 'dqro-fill-layer',
+            'type': 'fill',  
+            'source': 'dqro',  
+            'source-layer': globalDQROLayer, 
             'paint': {
                 'fill-color': '#000000', // Color de relleno (puede ser cualquiera)
                 'fill-opacity': 0 // Relleno 100% transparente
@@ -434,6 +480,8 @@ document.getElementById('layer-select').addEventListener('change', function (e) 
     toggleLayer('poereq-fill-layer', false);
     toggleLayer('poel-line-layer', false);
     toggleLayer('poel-fill-layer', false);
+    toggleLayer('dqro-line-layer', false);
+    toggleLayer('dqro-fill-layer', false);
 
     // Activar la capa seleccionada
     if (selectedLayer === 'anp') {
@@ -445,6 +493,9 @@ document.getElementById('layer-select').addEventListener('change', function (e) 
     } else if (selectedLayer === 'poel') {
         toggleLayer('poel-line-layer', true);
         toggleLayer('poel-fill-layer', true);
+    } else if (selectedLayer === 'dqro') {
+        toggleLayer('dqro-line-layer', true);
+        toggleLayer('dqro-fill-layer', true);
     }
 });
 
@@ -463,6 +514,8 @@ map.on('click', (e) => {
         activeLayers = ['poereq-fill-layer'];
     } else if (selectedLayer === 'poel') {
         activeLayers = ['poel-fill-layer'];
+    } else if (selectedLayer === 'dqro') {
+        activeLayers = ['dqro-fill-layer'];
     }
 
     const clickedFeatures = map.queryRenderedFeatures(e.point, {
